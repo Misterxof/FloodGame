@@ -3,14 +3,17 @@ package com.mygdx.game
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.mygdx.game.screen.MainMenuScreen
 
 open class DropGame : Game() {
     lateinit var batch: SpriteBatch
     lateinit var font: BitmapFont
+    lateinit var shapeRenderer: ShapeRenderer
     override fun create() {
         batch = SpriteBatch()
         font = BitmapFont()
+        shapeRenderer = ShapeRenderer()
         this.setScreen(MainMenuScreen(this))
     }
 

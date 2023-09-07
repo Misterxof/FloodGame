@@ -28,7 +28,8 @@ class MainMenuScreen(val game: DropGame) : Screen {
         game.batch.end()
 
         if (Gdx.input.isTouched) {
-            game.screen = GameScreen(game)
+//            game.screen = GameScreen(game)
+            game.screen = FloodGameScreen(game)
             dispose()
         }
     }
