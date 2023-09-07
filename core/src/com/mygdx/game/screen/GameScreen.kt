@@ -1,36 +1,30 @@
-package com.mygdx.game
+package com.mygdx.game.screen
 
-import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.TimeUtils
-import java.util.Iterator
+import com.mygdx.game.DropGame
 
-open class Drop : ApplicationAdapter() {
-    private lateinit var dropImage: Texture
-    private lateinit var bucketImage: Texture
-    private lateinit var camera: OrthographicCamera
-    private lateinit var batch: SpriteBatch
-    private lateinit var bucket:  Rectangle
+open class GameScreen(val game: DropGame) : Screen {
+    private val dropImage: Texture = Texture(Gdx.files.internal("drop.png"))
+    private val bucketImage: Texture = Texture(Gdx.files.internal("bucket.png"))
+    private val camera: OrthographicCamera = OrthographicCamera()
+
+    private lateinit var bucket: Rectangle
     private val raindrops: Array<Rectangle> = Array()
     private var lastDropTime: Long = 0
+    private var dropsGathered = 0
 
-    override fun create() {
-        dropImage = Texture(Gdx.files.internal("drop.png"))
-        bucketImage = Texture(Gdx.files.internal("bucket.png"))
-
-        camera = OrthographicCamera()
+    init {
         camera.setToOrtho(false, 800f, 480f)
-
-        batch = SpriteBatch()
 
         bucket = Rectangle()
         bucket.x = (800 / 2 - 64 / 2).toFloat()
@@ -41,18 +35,19 @@ open class Drop : ApplicationAdapter() {
         spawnRainDrop()
     }
 
-    override fun render() {
+    override fun render(delta: Float) {
         ScreenUtils.clear(0f, 0f, 0.2f, 1f)
 
         camera.update()
 
-        batch.projectionMatrix =  camera.combined
-        batch.begin()
-        batch.draw(bucketImage, bucket.x, bucket.y)
+        game.batch.projectionMatrix = camera.combined
+        game.batch.begin()
+        game.font.draw(game.batch, "Drops Collected: $dropsGathered", 0f, 480f)
+        game.batch.draw(bucketImage, bucket.x, bucket.y)
         raindrops.forEach {
-            batch.draw(dropImage, it.x, it.y)
+            game.batch.draw(dropImage, it.x, it.y)
         }
-        batch.end()
+        game.batch.end()
 
         if (Gdx.input.isTouched) {
             val touchPos: Vector3 = Vector3()
@@ -72,11 +67,12 @@ open class Drop : ApplicationAdapter() {
         val i = raindrops.iterator()
 
         while (i.hasNext()) {
-            val rainDrop : Rectangle = i.next()
+            val rainDrop: Rectangle = i.next()
             rainDrop.y -= 200 * Gdx.graphics.deltaTime
             if (rainDrop.y + 64 < 0) i.remove()
 
             if (rainDrop.overlaps(bucket)) {
+                dropsGathered++;
                 i.remove()
             }
         }
@@ -84,10 +80,24 @@ open class Drop : ApplicationAdapter() {
 
     }
 
+    override fun show() {
+    }
+
+    override fun resize(width: Int, height: Int) {
+    }
+
+    override fun pause() {
+    }
+
+    override fun resume() {
+    }
+
+    override fun hide() {
+    }
+
     override fun dispose() {
         dropImage.dispose()
         bucketImage.dispose()
-        batch.dispose()
     }
 
     private fun spawnRainDrop() {
