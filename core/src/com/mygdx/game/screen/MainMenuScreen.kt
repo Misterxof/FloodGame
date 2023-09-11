@@ -22,7 +22,7 @@ class MainMenuScreen(val game: FloodGame) : Screen {
     private val camera = OrthographicCamera()
     private val stage = Stage()
     private val table = Table()
-    private lateinit var skin: Skin
+    private val skin: Skin
 
     init {
         camera.setToOrtho(false, 800f, 480f)
@@ -46,7 +46,7 @@ class MainMenuScreen(val game: FloodGame) : Screen {
                 }
             })
         }
-        
+
         table.addActor(button)
     }
 
