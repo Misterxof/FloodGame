@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.TimeUtils
-import com.mygdx.game.DropGame
+import com.mygdx.game.FloodGame
 
-open class GameScreen(val game: DropGame) : Screen {
+open class GameScreen(val game: FloodGame) : Screen {
     private val dropImage: Texture = Texture(Gdx.files.internal("drop.png"))
     private val bucketImage: Texture = Texture(Gdx.files.internal("bucket.png"))
     private val camera: OrthographicCamera = OrthographicCamera()

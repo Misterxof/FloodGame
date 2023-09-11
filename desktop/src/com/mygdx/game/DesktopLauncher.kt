@@ -9,6 +9,6 @@ fun main(args: Array<String>) {
     config.setTitle("Flood")
     config.setWindowedMode(800, 800)
     config.useVsync(true)
-    val game = DropGame()
+    val game = FloodGame()
     Lwjgl3Application(game, config)
 }

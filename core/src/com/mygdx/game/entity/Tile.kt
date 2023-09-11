@@ -9,11 +9,11 @@ class Tile(
     var width: Float,
     var height: Float,
     var occupation: TileOccupationType,
-    var seeLevel: Int
+    var groundLevel: Int
 ) {
 
     fun getColor(): Color {
-        when (seeLevel) {
+        when (groundLevel) {
             1 -> return ColorFlood(255f, 255f, 204f, 1f).toRGB01()
             2 -> return ColorFlood(255f, 255f, 128f, 1f).toRGB01()
             3 -> return ColorFlood(255f, 218f, 179f, 1f).toRGB01()
@@ -25,7 +25,7 @@ class Tile(
     }
 
     override fun toString(): String {
-        return "Tile(x=$x, y=$y, width=$width, height=$height, occupation=$occupation, seeLevel=$seeLevel)"
+        return "Tile(x=$x, y=$y, width=$width, height=$height, occupation=$occupation, seeLevel=$groundLevel)"
     }
 
 

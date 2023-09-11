@@ -1,16 +1,15 @@
 package com.mygdx.game.screen
 
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.Array
-import com.mygdx.game.DropGame
+import com.mygdx.game.FloodGame
 import com.mygdx.game.TileOccupationType
 import com.mygdx.game.entity.Tile
 import kotlin.random.Random
 
-class FloodGameScreen(val game: DropGame): Screen {
+class FloodGameScreen(val game: FloodGame): Screen {
     val tiles = Array<Tile>()
     private val camera: OrthographicCamera = OrthographicCamera()
 
@@ -19,7 +18,7 @@ class FloodGameScreen(val game: DropGame): Screen {
 
         for (i in 0 .. 700 step 100) {
             for (j in 0 .. 700 step 100) {
-                val tile = Tile(i.toFloat(), j.toFloat(), 100f, 100f, TileOccupationType.FREE, Random.nextInt(1, 5))
+                val tile = Tile(j.toFloat(), i.toFloat(), 100f, 100f, TileOccupationType.FREE, Random.nextInt(1, 5))
                 tiles.add(tile)
             }
         }
@@ -29,8 +28,8 @@ class FloodGameScreen(val game: DropGame): Screen {
 
     override fun render(delta: Float) {
         game.shapeRenderer.projectionMatrix = camera.combined
+        game.batch.projectionMatrix = camera.combined
         camera.update()
-
 
         tiles.forEach { tile ->
             game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
@@ -38,6 +37,12 @@ class FloodGameScreen(val game: DropGame): Screen {
             game.shapeRenderer.rect(tile.x, tile.y, tile.width, tile.height)
             game.shapeRenderer.end()
         }
+
+        game.batch.begin()
+        tiles.forEach { tile ->
+            game.font.draw(game.batch, "${tile.groundLevel}", tile.x + 50, tile.y + 50)
+        }
+        game.batch.end()
 
     }
 

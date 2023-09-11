@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.mygdx.game.screen.MainMenuScreen
 
-open class DropGame : Game() {
+open class FloodGame : Game() {
     lateinit var batch: SpriteBatch
     lateinit var font: BitmapFont
     lateinit var shapeRenderer: ShapeRenderer
