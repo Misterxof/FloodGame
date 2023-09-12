@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.ScreenUtils
+import com.mygdx.game.DpiUtils
 import com.mygdx.game.FloodGame
 
 class MainMenuScreen(val game: FloodGame) : Screen {
@@ -23,20 +24,22 @@ class MainMenuScreen(val game: FloodGame) : Screen {
     private val stage = Stage()
     private val table = Table()
     private val skin: Skin
+    private var dp: Float
 
     init {
-        camera.setToOrtho(false, 800f, 480f)
+        camera.setToOrtho(false, 800f, 800f)
         Gdx.input.inputProcessor = stage
+        dp = DpiUtils.getDp(Gdx.graphics)
 
         skin = Skin(Gdx.files.internal("uiskin.json"))
 
         table.setFillParent(true)
-        table.debug = true
+        //table.debug = true
         stage.addActor(table)
 
         val button = TextButton("Play",skin, "default").apply {
-            width = 200f
-            height = 200f
+            width = 200f * dp
+            height = 200f * dp
             setPosition(Gdx.graphics.width /2 - 100f, Gdx.graphics.height /2 - 10f)
 
             addListener(object : ClickListener() {
@@ -51,6 +54,7 @@ class MainMenuScreen(val game: FloodGame) : Screen {
     }
 
     override fun show() {
+
     }
 
     override fun render(delta: Float) {
