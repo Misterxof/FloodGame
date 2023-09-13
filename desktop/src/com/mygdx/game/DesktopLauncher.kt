@@ -7,8 +7,8 @@ fun main(args: Array<String>) {
     val config = Lwjgl3ApplicationConfiguration()
     config.setForegroundFPS(60)
     config.setTitle("Flood")
-    config.setWindowedMode(800, 800)
+    config.setWindowedMode(1000, 1000)
     config.useVsync(true)
-    val game = FloodGame()
+    val game = FloodGame(1000f, 1000f)
     Lwjgl3Application(game, config)
 }

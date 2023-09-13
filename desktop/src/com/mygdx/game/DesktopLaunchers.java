@@ -11,7 +11,7 @@ public class DesktopLaunchers {
         config.setTitle("Drop");
         config.setWindowedMode(800, 480);
         config.useVsync(true);
-        FloodGame game = new FloodGame();
+        FloodGame game = new FloodGame(800f, 480f);
         new Lwjgl3Application(game, config);
     }
 }

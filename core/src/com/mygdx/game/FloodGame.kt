@@ -8,7 +8,7 @@ import com.mygdx.game.screen.MainMenuScreen
 
 
 // !!! px to dp concept
-open class FloodGame : Game() {
+open class FloodGame(var width: Float, var height: Float) : Game() {
     lateinit var batch: SpriteBatch
     lateinit var font: BitmapFont
     lateinit var shapeRenderer: ShapeRenderer

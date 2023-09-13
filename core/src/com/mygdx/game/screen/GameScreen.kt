@@ -49,7 +49,7 @@ open class GameScreen(val game: FloodGame) : Screen {
         }
         game.batch.end()
 
-        if (Gdx.input.isTouched) {
+        if (Gdx.input.justTouched()) {
             val touchPos: Vector3 = Vector3()
             touchPos.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f)
             camera.unproject(touchPos)

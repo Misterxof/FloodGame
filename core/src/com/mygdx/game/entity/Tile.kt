@@ -24,6 +24,12 @@ class Tile(
         return ColorFlood(0f, 0f, 0f, 0f).getColor()
     }
 
+    fun raiseGroundLevel() {
+        groundLevel++
+        if (groundLevel > 5)
+            groundLevel = 1
+    }
+
     override fun toString(): String {
         return "Tile(x=$x, y=$y, width=$width, height=$height, occupation=$occupation, seeLevel=$groundLevel)"
     }

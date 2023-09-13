@@ -4,17 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.ScreenUtils
 import com.mygdx.game.DpiUtils
 import com.mygdx.game.FloodGame
@@ -27,7 +22,7 @@ class MainMenuScreen(val game: FloodGame) : Screen {
     private var dp: Float
 
     init {
-        camera.setToOrtho(false, 800f, 800f)
+        camera.setToOrtho(false, game.width, game.height)
         Gdx.input.inputProcessor = stage
         dp = DpiUtils.getDp(Gdx.graphics)
 
@@ -37,9 +32,9 @@ class MainMenuScreen(val game: FloodGame) : Screen {
         //table.debug = true
         stage.addActor(table)
 
-        val button = TextButton("Play",skin, "default").apply {
+        val playButton = TextButton("Play",skin, "default").apply {
             width = 200f * dp
-            height = 200f * dp
+            height = 100f * dp
             setPosition(Gdx.graphics.width /2 - 100f, Gdx.graphics.height /2 - 10f)
 
             addListener(object : ClickListener() {
@@ -50,7 +45,21 @@ class MainMenuScreen(val game: FloodGame) : Screen {
             })
         }
 
-        table.addActor(button)
+        val levelCreatorButton = TextButton("Create level",skin, "default").apply {
+            width = 200f * dp
+            height = 100f * dp
+            setPosition(playButton.x, playButton.y - 120f)
+
+            addListener(object : ClickListener() {
+                override fun clicked(event: InputEvent, x:  Float, y:Float){
+                    game.screen = LevelCreatorScreen(game)
+                    dispose()
+                }
+            })
+        }
+
+        table.addActor(playButton)
+        table.addActor(levelCreatorButton)
     }
 
     override fun show() {
