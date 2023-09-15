@@ -1,7 +1,11 @@
 package com.mygdx.game.entity
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.utils.Json
+import com.mygdx.game.JsonFileWriter
+import com.mygdx.game.JsonSerialization
 import com.mygdx.game.TileOccupationType
+import java.io.PrintWriter
 
 class Tile(
     var x: Float,
@@ -10,7 +14,7 @@ class Tile(
     var height: Float,
     var occupation: TileOccupationType,
     var groundLevel: Int
-) {
+) : JsonSerialization {
 
     fun getColor(): Color {
         when (groundLevel) {
@@ -29,6 +33,19 @@ class Tile(
         if (groundLevel > 5)
             groundLevel = 1
     }
+
+    override fun write(out: PrintWriter) {
+        out.println(JsonFileWriter.addNumber("x", x))
+        out.println(JsonFileWriter.addNumber("y", y))
+        out.println(JsonFileWriter.addNumber("width", width))
+        out.println(JsonFileWriter.addNumber("height", height))
+        out.println(JsonFileWriter.addString("TileOccupationType", occupation.toString()))
+        out.println(JsonFileWriter.addNumber("groundLevel", groundLevel))
+    }
+
+//    fun writeToJson() : String {
+//        "Tile : { \n \" "
+//    }
 
     override fun toString(): String {
         return "Tile(x=$x, y=$y, width=$width, height=$height, occupation=$occupation, seeLevel=$groundLevel)"
