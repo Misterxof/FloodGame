@@ -1,7 +1,5 @@
 package com.mygdx.game
 
-import com.mygdx.game.JsonFileWriter.Companion.getType
-import com.mygdx.game.entity.Tile
 import java.io.File
 import java.io.PrintWriter
 
@@ -12,24 +10,67 @@ class JsonFileWriter {
 
             file.printWriter().use { out ->
                 out.println(addJSONStart())
-                writeObject(out, objectToWrite)
+                writeObject(out, objectToWrite, false)
                 out.println(addJSONEnd())
             }
         }
 
-        fun <T> write(fileName: String, arrayToWrite: ArrayList<T>, arrayName: String) {
+        // * json trailing comma
+        fun <T> write(fileName: String, arrayToWrite: ArrayList<T>, arrayType: String) {
             val file = createFile(fileName)
 
             file.printWriter().use { out ->
                 out.println(addJSONStart())
-                out.println(addArrayStart(arrayName))
-               // writeObject(out, objectToWrite)
+                out.println(addArrayStart(arrayType))
+
+                when {
+                    arrayToWrite.isNullOrEmpty() -> {
+                        out.println(addArrayEnd())
+                        out.println(addJSONEnd())
+                        return
+                    }
+
+                    arrayToWrite[0] is String -> {
+                        arrayToWrite.forEach {
+                            out.println(addStringToArray(it as String))
+                        }
+                    }
+
+                    arrayToWrite[0] is Boolean -> {
+                        arrayToWrite.forEach {
+                            out.println(addBooleanToArray(it as Boolean))
+                        }
+                    }
+
+                    arrayToWrite[0] is Number -> {
+                        arrayToWrite.forEach {
+                            out.println(addNumberToArray(it as Number))
+                        }
+                    }
+
+                    else -> {
+                        arrayToWrite.forEach {
+                            writeObject(out, it as JsonSerialization, true)
+                        }
+                    }
+                }
+
                 out.println(addArrayEnd())
                 out.println(addJSONEnd())
             }
         }
 
-        private fun createFile(fileName: String) : File {
+        fun writeObject(out: PrintWriter, objectToWrite: JsonSerialization, isArray: Boolean) {
+            if (isArray) out.println(addJSONStart())
+            else out.println(addObjectStart(objectToWrite))
+
+            objectToWrite.write(out)
+
+            if (isArray) out.println("${addJSONEnd()},")
+            else out.println(addJSONEnd())
+        }
+
+        private fun createFile(fileName: String): File {
             val path = "F:/floodTest"
             val fullName = "$path/$fileName"
 
@@ -39,59 +80,57 @@ class JsonFileWriter {
             return File(fullName)
         }
 
-        fun addArrayStart(arrayName: String) : String {
+        fun addArrayStart(arrayName: String): String {
             return "\"${arrayName}\" : ["
         }
 
-        fun addArrayEnd() : String {
+        fun addArrayEnd(): String {
             return "]"
         }
 
-        fun addObjectStart(objectToWrite: Any) : String {
+        fun addObjectStart(objectToWrite: Any): String {
             return "\"${objectToWrite.javaClass.simpleName}\" : {"
         }
 
-        fun addJSONStart() : String {
+        fun addJSONStart(): String {
             return "{"
         }
-        fun addJSONEnd() : String {
+
+        fun addJSONEnd(): String {
             return "}"
         }
 
-        fun writeObject(out: PrintWriter, objectToWrite: JsonSerialization) {
-            out.println(addObjectStart(objectToWrite))
-            objectToWrite.write(out)
-            out.println(addJSONEnd())
-        }
-
-        fun addString(fieldName: String, value: String) : String {
+        fun addString(fieldName: String, value: String): String {
             return "\"$fieldName\" : \"$value\","
         }
 
-        fun addBoolean(fieldName: String, value: Boolean) : String {
+        fun addBoolean(fieldName: String, value: Boolean): String {
             return "\"$fieldName\" : $value,"
         }
 
-        fun addNumber(fieldName: String, value: Number) : String {
+        fun addNumber(fieldName: String, value: Number): String {
             return "\"$fieldName\" : $value,"
+        }
+
+        fun addStringToArray(value: String): String {
+            return "\"$value\","
+        }
+
+        fun addBooleanToArray(value: Boolean): String {
+            return "$value,"
+        }
+
+        fun addNumberToArray(value: Number): String {
+            return "$value,"
         }
 
         inline fun <reified T> ArrayList<T>.getType(): String = T::class.java.simpleName
 
-        inline fun <reified T : Any>T.logTag(): String = T::class.java.simpleName
+        inline fun <reified T : Any> T.logTag(): String = T::class.java.simpleName
 
 //        fun tre(ty: ArrayList<out Any>) {
 //            println(ty::class.java.toGenericString())
 ////            ty.getType()
 //        }
     }
-}
-
-fun main() {
-    val tile = Tile(0f,0f,10f,10f,TileOccupationType.FREE,1)
-    val ar = ArrayList<Tile>()
-    JsonFileWriter.write("ter2.json", ar, "Tiles")
-   // JsonFileWriter.tre(ar)
-
-    ar.getType()
 }

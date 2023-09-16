@@ -90,5 +90,6 @@ class MainMenuScreen(val game: FloodGame) : Screen {
 
     override fun dispose() {
         stage.dispose()
+        skin.dispose()
     }
 }
