@@ -16,7 +16,7 @@ class JsonFileWriter {
         }
 
         // * json trailing comma
-        fun <T> write(fileName: String, arrayToWrite: ArrayList<T>, arrayType: String) {
+        fun <T> write(fileName: String, arrayToWrite: ArrayList<T>, arrayType: String): Boolean {
             val file = createFile(fileName)
 
             file.printWriter().use { out ->
@@ -27,7 +27,7 @@ class JsonFileWriter {
                     arrayToWrite.isNullOrEmpty() -> {
                         out.println(addArrayEnd())
                         out.println(addJSONEnd())
-                        return
+                        return true
                     }
 
                     arrayToWrite[0] is String -> {
@@ -57,6 +57,8 @@ class JsonFileWriter {
 
                 out.println(addArrayEnd())
                 out.println(addJSONEnd())
+
+                return true
             }
         }
 
