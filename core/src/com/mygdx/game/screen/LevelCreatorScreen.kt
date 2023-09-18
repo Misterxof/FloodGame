@@ -21,6 +21,7 @@ import com.mygdx.game.FloodGame
 import com.mygdx.game.JsonFileWriter
 import com.mygdx.game.TileOccupationType
 import com.mygdx.game.entity.Tile
+import com.mygdx.game.ui.SaveLevelDialog
 import java.lang.StringBuilder
 import kotlin.random.Random
 
@@ -31,7 +32,6 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
     private val stage = Stage()
     private val skin: Skin
     private val table = Table()
-    private val dialogTable = Table()
     private var fileName = StringBuilder("default")
     private var isDialogOpen = false
 
@@ -39,12 +39,6 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
         camera.setToOrtho(false, game.width, game.height)
         skin = Skin(Gdx.files.internal("uiskin.json"))
         Gdx.input.inputProcessor = stage
-
-        val dialog = Dialog("Save level", skin)
-
-//        dialogScreen.isVisible = false
-//        dialogScreen.setSize(stage.viewport.screenWidth.toFloat() / 2, stage.viewport.screenHeight.toFloat() / 2)
-        //val successLabel = Label("Level is saved", skin)
 
         table.setFillParent(false)
         table.color = Color.WHITE
@@ -54,42 +48,16 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
         table.debug = true  // outline for now
         stage.addActor(table)
 
-        val saveLevelButton = TextButton("Save", skin, "default").apply {
-
-            addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    val isSaved = JsonFileWriter.write("$fileName.json", tiles, "Tile")
-                    if (isSaved) {
-                        dialog.hide()
-                        fileName.clear()
-                        fileName.append("default")
-                        println(fileName)
-                        isDialogOpen = false
-                    }
-                }
-            })
-        }
-
-        val fileNameLabel = Label("File name: ", skin)
-        val fileNameTextField = TextField("default", skin)
-        fileNameTextField.setTextFieldListener { textField, c ->
-            if (c.code == 8 && fileName.isNotEmpty()) {
-                fileName.deleteCharAt(fileName.length - 1);
-            } else
-                fileName.append(c)
-        }
-        dialogTable.padTop(16f)
-        dialogTable.add(fileNameLabel).padRight(8f).padLeft(8f)
-        dialogTable.add(fileNameTextField).padRight(8f)
-        dialogTable.row()
-        dialogTable.add(saveLevelButton).padTop(8f).colspan(2)
-
-        dialog.contentTable.add(dialogTable)
-
         val openSaveDialogButton = TextButton("Save", skin, "default").apply {
 
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
+                    val dialog = SaveLevelDialog("Save level", skin)
+
+                    dialog.createDialog(fileName, { isDialogOpen ->  this@LevelCreatorScreen.isDialogOpen = isDialogOpen}) { newFileName ->
+                        JsonFileWriter.write("$newFileName.json", tiles, "Tile")
+                    }
+
                     dialog.show(stage)
                     isDialogOpen = true
                 }
@@ -113,8 +81,6 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
                 tiles.add(tile)
             }
         }
-
-
     }
 
     override fun show() {
