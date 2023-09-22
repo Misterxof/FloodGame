@@ -1,4 +1,4 @@
-package com.mygdx.game.ui
+package com.mygdx.game.ui.dialog
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*

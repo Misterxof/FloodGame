@@ -83,7 +83,7 @@ class JsonFileWriter {
         }
 
         fun addArrayStart(arrayName: String): String {
-            return "\"${arrayName}\" : ["
+            return "\"${arrayName}\" : \n["
         }
 
         fun addArrayEnd(): String {
@@ -91,7 +91,7 @@ class JsonFileWriter {
         }
 
         fun addObjectStart(objectToWrite: Any): String {
-            return "\"${objectToWrite.javaClass.simpleName}\" : {"
+            return "\"${objectToWrite.javaClass.simpleName}\" : \n{"
         }
 
         fun addJSONStart(): String {

@@ -16,6 +16,15 @@ class Tile(
     var groundLevel: Int
 ) : JsonSerialization {
 
+    constructor(builder: Builder) : this(
+        builder.x,
+        builder.y,
+        builder.width,
+        builder.height,
+        builder.occupation,
+        builder.groundLevel
+    )
+
     fun getColor(): Color {
         when (groundLevel) {
             1 -> return ColorFlood(255f, 255f, 204f, 1f).toRGB01()
@@ -43,6 +52,10 @@ class Tile(
         out.println(JsonFileWriter.addNumber("groundLevel", groundLevel))
     }
 
+    fun read(input: String) {
+
+    }
+
 //    fun writeToJson() : String {
 //        "Tile : { \n \" "
 //    }
@@ -51,5 +64,18 @@ class Tile(
         return "Tile(x=$x, y=$y, width=$width, height=$height, occupation=$occupation, seeLevel=$groundLevel)"
     }
 
+    companion object {
+        fun create(init: Builder.() -> Unit) = Builder().apply(init).build()
+    }
 
+    class Builder  {
+        var x = 0f
+        var y = 0f
+        var width = 0f
+        var height = 0f
+        var occupation = TileOccupationType.FREE
+        var groundLevel = 0
+
+        fun build() = Tile(this)
+    }
 }

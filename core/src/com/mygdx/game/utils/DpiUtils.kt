@@ -1,4 +1,4 @@
-package com.mygdx.game
+package com.mygdx.game.utils
 
 import com.badlogic.gdx.Graphics
 import kotlin.math.atan
