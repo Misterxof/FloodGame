@@ -26,15 +26,14 @@ class Tile(
     )
 
     fun getColor(): Color {
-        when (groundLevel) {
-            1 -> return ColorFlood(255f, 255f, 204f, 1f).toRGB01()
-            2 -> return ColorFlood(255f, 255f, 128f, 1f).toRGB01()
-            3 -> return ColorFlood(255f, 218f, 179f, 1f).toRGB01()
-            4 -> return ColorFlood(255f, 181f, 102f, 1f).toRGB01()
-            5 -> return ColorFlood(204f, 153f, 0f, 1f).toRGB01()
+        return when (groundLevel) {
+            1 -> ColorFlood.FIRST_GROUND_LEVEL
+            2 -> ColorFlood.SECOND_GROUND_LEVEL
+            3 -> ColorFlood.THIRD_GROUND_LEVEL
+            4 -> ColorFlood.FOURTH_GROUND_LEVEL
+            5 -> ColorFlood.FIFTH_GROUND_LEVEL
             else -> throw Exception("See level is not set or unsupported! Range is 1 - 5")
         }
-        return ColorFlood(0f, 0f, 0f, 0f).getColor()
     }
 
     fun raiseGroundLevel() {

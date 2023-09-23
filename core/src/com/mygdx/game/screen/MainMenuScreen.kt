@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.ScreenUtils
-import com.mygdx.game.utils.DpiUtils
 import com.mygdx.game.FloodGame
+import com.mygdx.game.utils.DpiUtils
 
 class MainMenuScreen(val game: FloodGame) : Screen {
     private val camera = OrthographicCamera()
@@ -32,26 +32,26 @@ class MainMenuScreen(val game: FloodGame) : Screen {
         //table.debug = true
         stage.addActor(table)
 
-        val playButton = TextButton("Play",skin, "default").apply {
+        val playButton = TextButton("Play", skin, "default").apply {
             width = 200f * dp
             height = 100f * dp
-            setPosition(Gdx.graphics.width /2 - 100f, Gdx.graphics.height /2 - 10f)
+            setPosition(Gdx.graphics.width / 2 - 100f, Gdx.graphics.height / 2 - 10f)
 
             addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent, x:  Float, y:Float){
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
                     game.screen = FloodGameScreen(game)
                     dispose()
                 }
             })
         }
 
-        val levelCreatorButton = TextButton("Create level",skin, "default").apply {
+        val levelCreatorButton = TextButton("Create level", skin, "default").apply {
             width = 200f * dp
             height = 100f * dp
             setPosition(playButton.x, playButton.y - 120f)
 
             addListener(object : ClickListener() {
-                override fun clicked(event: InputEvent, x:  Float, y:Float){
+                override fun clicked(event: InputEvent, x: Float, y: Float) {
                     game.screen = LevelCreatorScreen(game)
                     dispose()
                 }

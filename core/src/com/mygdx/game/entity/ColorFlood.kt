@@ -19,4 +19,14 @@ class ColorFlood(
     }
 
     fun getColor() = Color(r, g, b, a)
+
+    companion object {
+        val DIRECTORY = ColorFlood(255f, 219f, 77f, 1f).toRGB01()
+        val CARD_BACKGROUND = ColorFlood(191f, 191f, 191f, 1f).toRGB01()
+        val FIRST_GROUND_LEVEL = ColorFlood(255f, 255f, 204f, 1f).toRGB01()
+        val SECOND_GROUND_LEVEL = ColorFlood(255f, 255f, 128f, 1f).toRGB01()
+        val THIRD_GROUND_LEVEL = ColorFlood(255f, 218f, 179f, 1f).toRGB01()
+        val FOURTH_GROUND_LEVEL = ColorFlood(255f, 181f, 102f, 1f).toRGB01()
+        val FIFTH_GROUND_LEVEL = ColorFlood(204f, 153f, 0f, 1f).toRGB01()
+    }
 }

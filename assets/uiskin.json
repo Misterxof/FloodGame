@@ -9,6 +9,7 @@ Color: {
 },
 TintedDrawable: {
 	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } },
+	cardDrawable: { name: cardDrawable, color: { r: 0, g: 0, b: 0, a: 0.45 } },
 },
 ButtonStyle: {
 	default: { down: default-round-down, up: default-round, disabled: default-round },

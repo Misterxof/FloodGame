@@ -16,8 +16,8 @@ import com.mygdx.game.FloodGame
 import com.mygdx.game.JsonFileWriter
 import com.mygdx.game.TileOccupationType
 import com.mygdx.game.entity.Tile
+import com.mygdx.game.ui.dialog.LoadLevelDialog
 import com.mygdx.game.ui.dialog.SaveLevelDialog
-import java.lang.StringBuilder
 import kotlin.random.Random
 
 
@@ -49,7 +49,9 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     val dialog = SaveLevelDialog("Save level", skin)
 
-                    dialog.createDialog(fileName, { isDialogOpen ->  this@LevelCreatorScreen.isDialogOpen = isDialogOpen}) { newFileName ->
+                    dialog.createDialog(
+                        fileName,
+                        { isDialogOpen -> this@LevelCreatorScreen.isDialogOpen = isDialogOpen }) { newFileName ->
                         JsonFileWriter.write("$newFileName.json", tiles, "Tile")
                     }
 
@@ -63,12 +65,20 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
 
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    // ! some conformation on success
+                    val dialog = LoadLevelDialog("Load level", skin)
+
+                    dialog.createDialog() {
+                        this@LevelCreatorScreen.isDialogOpen = isDialogOpen
+                    }
+
+                    dialog.show(stage)
+                    isDialogOpen = true
                 }
             })
         }
 
         table.add(openSaveDialogButton)
+        table.add(loadLevelButton).padLeft(8f)
 
         for (i in 100..800 step 100) {
             for (j in 100..800 step 100) {
