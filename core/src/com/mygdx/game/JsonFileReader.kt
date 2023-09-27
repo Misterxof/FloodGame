@@ -40,6 +40,8 @@ class JsonFileReader {
                 }
             }
 
+            clear()
+
             return result
         }
 
@@ -100,6 +102,16 @@ class JsonFileReader {
                     value.clear()
                 }
             }
+        }
+
+        fun clear() {
+            bracketsStack.clear()
+            currentClass = (null to 0)
+            value.clear()
+            classContent.clear()
+            isObject = false
+            isArray = false
+            factory = null
         }
     }
 }

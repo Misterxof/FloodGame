@@ -5,43 +5,52 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.Align
-import com.mygdx.game.entity.ColorFlood
+import com.mygdx.game.JsonFileReader
+import com.mygdx.game.JsonSerialization
+import com.mygdx.game.ui.ListCard
 import java.io.File
 import kotlin.io.path.Path
 
 class LoadLevelDialog(title: String, skin: Skin) : Dialog(title, skin) {
     private val dialogTable = Table()
-    val table = Table()
-    lateinit var scrollPane: ScrollPane
+    private val table = Table()
+
+    private lateinit var scrollPane: ScrollPane
+    private var currentPath = "F:\\floodTest"
+    var currentSelectedFile: String = ""
+
+    val setSelectedFile: (String) -> Unit = { fileName -> currentSelectedFile = fileName }
 
     fun createDialog(
-        dialogEndedCallback: (isDialogOpen: Boolean) -> Unit,
+        dialogEndedCallback: (isDialogOpen: Boolean, levelObjects: ArrayList<JsonSerialization>) -> Unit,
     ) {
 //        showFilesList(Gdx.files.localStoragePath)
-        showFilesList("F:\\floodTest")
+        showFilesList(currentPath)
 
         table.debug = true
         table.align(Align.left or Align.top)
-        println(this.contentTable.height)
 
         scrollPane = ScrollPane(table, skin)
 
-        println(scrollPane.height)
-        val saveLevelButton = TextButton("Load", skin, "default").apply {
+        val loadLevelButton = TextButton("Load", skin, "default").apply {
 
             addListener(object : ClickListener() {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
-                    this@LoadLevelDialog.hide()
-                    dialogEndedCallback(false)
+
+                    if (currentSelectedFile.isNotBlank()) {
+                        val levelObjects = JsonFileReader.readFile("$currentPath\\$currentSelectedFile")
+
+                        this@LoadLevelDialog.hide()
+                        dialogEndedCallback(false, levelObjects)
+                    }
                 }
             })
         }
 
-        println("height ${Gdx.graphics.height}")
         dialogTable.padTop(16f)
         dialogTable.add(scrollPane).height(Gdx.graphics.height / 2f).width(Gdx.graphics.width / 3f)
         dialogTable.row()
-        dialogTable.add(saveLevelButton).padTop(8f).colspan(2)
+        dialogTable.add(loadLevelButton).padTop(8f).colspan(2)
 
         scrollPane.setScrollbarsVisible(true)
         this.contentTable.add(dialogTable)
@@ -59,49 +68,25 @@ class LoadLevelDialog(title: String, skin: Skin) : Dialog(title, skin) {
             }
         }
         val currentPath = Path(path)
+        this.currentPath = path
 
         if (currentPath.parent != null) {
-            val label = Label("...", skin).apply {
-                color = ColorFlood.DIRECTORY
-                addListener(object : ClickListener() {
-                    override fun clicked(event: InputEvent, x: Float, y: Float) {
-                        if (tapCount >= 2) {
-                            table.clear()
-                            showFilesList(currentPath.parent.toString())
-                        }
-                    }
-                })
+            val card = ListCard("...", true, skin, setSelectedFile) {
+                table.clear()
+                showFilesList(currentPath.parent.toString())
             }
 
-            table.add(label).left()
+            table.add(card).left().expandX().width(Gdx.graphics.width / 3f - 5f)
             table.row()
         }
 
         files.forEach {
-            val card = ListCard(it.name, it.isDirectory, skin) {
+            val card = ListCard(it.name, it.isDirectory, skin, setSelectedFile) {
                 table.clear()
                 showFilesList(it.path)
             }
-            table.add(card).left()
+            table.add(card).left().expandX().width(Gdx.graphics.width / 3f - 5f)
             table.row()
-//            val label = Label("${it.name}", skin)
-//
-//            label.addListener(object : ClickListener() {
-//                override fun clicked(event: InputEvent, x: Float, y: Float) {
-//                    if (it.isDirectory && tapCount >= 2) {
-//                        table.clear()
-//                        showFilesList(it.path)
-//                    }
-//                }
-//            })
-//
-//            if (it.isDirectory)
-//                label.color = ColorFlood.DIRECTORY
-//            if (it.name.contains(".json"))
-//                label.color = ColorFlood(51f, 255f, 51f, 1f).toRGB01()
-//
-//            table.add(label).left()
-//            table.row()
         }
     }
 }

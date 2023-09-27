@@ -22,13 +22,15 @@ import kotlin.random.Random
 
 
 class LevelCreatorScreen(val game: FloodGame) : Screen {
-    val tiles = ArrayList<Tile>()
     private val camera: OrthographicCamera = OrthographicCamera()
     private val stage = Stage()
     private val skin: Skin
     private val table = Table()
+
     private var fileName = StringBuilder("default")
     private var isDialogOpen = false
+
+    var tiles = ArrayList<Tile>()
 
     init {
         camera.setToOrtho(false, game.width, game.height)
@@ -67,8 +69,9 @@ class LevelCreatorScreen(val game: FloodGame) : Screen {
                 override fun clicked(event: InputEvent, x: Float, y: Float) {
                     val dialog = LoadLevelDialog("Load level", skin)
 
-                    dialog.createDialog() {
+                    dialog.createDialog() { isDialogOpen, levelObjects ->
                         this@LevelCreatorScreen.isDialogOpen = isDialogOpen
+                        tiles = levelObjects as ArrayList<Tile>
                     }
 
                     dialog.show(stage)
