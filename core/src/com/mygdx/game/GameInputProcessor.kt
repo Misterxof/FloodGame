@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.mygdx.game.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -55,8 +56,20 @@ class GameInputProcessor(private val camera: OrthographicCamera) : InputProcesso
     }
 
     override fun keyDown(keycode: Int): Boolean {
-        pressedKeys.add(keycode)
-        onMultipleType(keycode)
+        when (keycode) {
+            Input.Keys.NUMPAD_ADD -> {
+                camera.zoom -= Utils.ZOOM_VALUE
+            }
+
+            Input.Keys.NUMPAD_SUBTRACT -> {
+                camera.zoom += Utils.ZOOM_VALUE
+            }
+
+            else -> {
+                pressedKeys.add(keycode)
+                onMultipleType(keycode)
+            }
+        }
 
         return false
     }
@@ -91,6 +104,11 @@ class GameInputProcessor(private val camera: OrthographicCamera) : InputProcesso
     }
 
     override fun scrolled(amountX: Float, amountY: Float): Boolean {
+        if (amountY > 0)
+            camera.zoom += Utils.ZOOM_VALUE
+        else
+            camera.zoom -= Utils.ZOOM_VALUE
+
         return false
     }
 }

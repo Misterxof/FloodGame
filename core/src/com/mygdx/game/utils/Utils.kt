@@ -4,6 +4,8 @@ import com.mygdx.game.TileOccupationType
 
 class Utils {
     companion object {
+        const val ZOOM_VALUE = 0.2f
+
         fun getOccupation(occupation: String): TileOccupationType {
             return when (occupation) {
                 "FREE" -> TileOccupationType.FREE
