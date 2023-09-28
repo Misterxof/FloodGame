@@ -14,6 +14,8 @@ class JsonFileReader {
         private var isObject = false
         private var isArray = false
         private var factory: EntityFactory? = null
+
+        // return Map<KClass<*>?, ArrayList<Type or JsonSerialization>>
         fun readFile(fileName: String): ArrayList<JsonSerialization> {
             val result = ArrayList<JsonSerialization>()
 
